@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Jogo do Aniversário 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .question-container {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .score {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #1976d2;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .next-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .final-message {
+            display: none;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .final-message h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .final-message p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .restart-btn {
+            background: white;
+            color: #ff6b6b;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            animation: confetti 3s linear infinite;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎂 Parabéns! 🎂</h1>
+            <p>Vamos testar o quanto você sabe sobre a aniversariante!</p>
+        </div>
+
+        <div class="score" id="score">Pontuação: 0/0</div>
+
+        <div class="question-container active" id="question1">
+            <div class="question">
+                <h3>Qual é a matéria preferida da aniversariante?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 1)">Matemática</div>
+                <div class="option" onclick="checkAnswer(1, 1)">Biologia</div>
+                <div class="option" onclick="checkAnswer(2, 1)">História</div>
+                <div class="option" onclick="checkAnswer(3, 1)">Geografia</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question2">
+            <div class="question">
+                <h3>Qual é o apelido do menino que ela gosta?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 2)">Cigarrinho Solto</div>
+                <div class="option" onclick="checkAnswer(1, 2)">Joãozinho</div>
+                <div class="option" onclick="checkAnswer(2, 2)">Pedrinho</div>
+                <div class="option" onclick="checkAnswer(3, 2)">Carlinhos</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question3">
+            <div class="question">
+                <h3>Qual é o doce preferido da aniversariante?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 3)">Sorvete</div>
+                <div class="option" onclick="checkAnswer(1, 3)">Chocolate</div>
+                <div class="option" onclick="checkAnswer(2, 3)">Brigadeiro</div>
+                <div class="option" onclick="checkAnswer(3, 3)">Pudim</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question4">
+            <div class="question">
+                <h3>Qual país ela tem vontade de conhecer?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 4)">França</div>
+                <div class="option" onclick="checkAnswer(1, 4)">Japão</div>
+                <div class="option" onclick="checkAnswer(2, 4)">Canadá</div>
+                <div class="option" onclick="checkAnswer(3, 4)">Itália</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question5">
+            <div class="question">
+                <h3>Quem são os pais da aniversariante?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 5)">Maria e José</div>
+                <div class="option" onclick="checkAnswer(1, 5)">Thais e Ricardo</div>
+                <div class="option" onclick="checkAnswer(2, 5)">Ana e Pedro</div>
+                <div class="option" onclick="checkAnswer(3, 5)">Lucia e Carlos</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question6">
+            <div class="question">
+                <h3>Quem são os irmãos da aniversariante?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 6)">João e Maria</div>
+                <div class="option" onclick="checkAnswer(1, 6)">Pedro e Ana</div>
+                <div class="option" onclick="checkAnswer(2, 6)">Marco Aurélio e Isadora</div>
+                <div class="option" onclick="checkAnswer(3, 6)">Carlos e Lucia</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question7">
+            <div class="question">
+                <h3>Quem são as primas da aniversariante?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 7)">Ana e Maria</div>
+                <div class="option" onclick="checkAnswer(1, 7)">Duda e Luane</div>
+                <div class="option" onclick="checkAnswer(2, 7)">Joana e Paula</div>
+                <div class="option" onclick="checkAnswer(3, 7)">Carla e Rita</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question8">
+            <div class="question">
+                <h3>Quantas flores ela ganhou no aniversário?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 8)">Milhares</div>
+                <div class="option" onclick="checkAnswer(1, 8)">Milhões</div>
+                <div class="option" onclick="checkAnswer(2, 8)">Centenas</div>
+                <div class="option" onclick="checkAnswer(3, 8)">Dezenas</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question9">
+            <div class="question">
+                <h3>Em que cidade ela mora?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 9)">São Paulo</div>
+                <div class="option" onclick="checkAnswer(1, 9)">Rio de Janeiro</div>
+                <div class="option" onclick="checkAnswer(2, 9)">Rio Preto</div>
+                <div class="option" onclick="checkAnswer(3, 9)">Belo Horizonte</div>
+            </div>
+        </div>
+
+        <div class="question-container" id="question10">
+            <div class="question">
+                <h3>Quantos anos ela está fazendo hoje?</h3>
+            </div>
+            <div class="options">
+                <div class="option" onclick="checkAnswer(0, 10)">16 anos</div>
+                <div class="option" onclick="checkAnswer(1, 10)">17 anos</div>
+                <div class="option" onclick="checkAnswer(2, 10)">18 anos</div>
+                <div class="option" onclick="checkAnswer(3, 10)">19 anos</div>
+            </div>
+        </div>
+
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Próxima Pergunta</button>
+
+        <div class="final-message" id="finalMessage">
+            <h2>🎉 PARABÉNS! 🎉</h2>
+            <p>Feliz 18 anos! Que esta nova fase da sua vida seja repleta de alegrias, conquistas e momentos especiais.</p>
+            <p>Que você realize todos os seus sonhos, incluindo conhecer o Canadá! 🌍</p>
+            <p>Que o amor da família e dos amigos sempre te acompanhe, e que você continue sendo essa pessoa incrível que é!</p>
+            <p>Que seus 18 anos sejam apenas o começo de uma vida extraordinária! ✨</p>
+            <p>Com muito carinho,<br>Família e Amigos ❤️</p>
+            <button class="restart-btn" onclick="restartGame()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        let score = 0;
+        let totalQuestions = 10;
+        let answeredQuestions = 0;
+
+        const correctAnswers = [1, 0, 1, 2, 1, 2, 1, 1, 2, 2];
+
+        function checkAnswer(selectedOption, questionNumber) {
+            const questionContainer = document.getElementById(`question${questionNumber}`);
+            const options = questionContainer.querySelectorAll('.option');
+            
+            // Desabilita todas as opções
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            // Marca a resposta correta
+            const correctIndex = correctAnswers[questionNumber - 1];
+            options[correctIndex].classList.add('correct');
+
+            // Marca a resposta selecionada
+            if (selectedOption !== correctIndex) {
+                options[selectedOption].classList.add('incorrect');
+            } else {
+                score++;
+            }
+
+            answeredQuestions++;
+            updateScore();
+
+            // Mostra o botão de próxima pergunta
+            if (questionNumber < totalQuestions) {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            } else {
+                // Última pergunta - mostra mensagem final
+                setTimeout(() => {
+                    showFinalMessage();
+                }, 1500);
+            }
+        }
+
+        function nextQuestion() {
+            // Esconde a pergunta atual
+            document.getElementById(`question${currentQuestion}`).classList.remove('active');
+            
+            // Mostra a próxima pergunta
+            currentQuestion++;
+            document.getElementById(`question${currentQuestion}`).classList.add('active');
+            
+            // Esconde o botão
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = `Pontuação: ${score}/${answeredQuestions}`;
+        }
+
+        function showFinalMessage() {
+            // Esconde todas as perguntas
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById(`question${i}`).style.display = 'none';
+            }
+            
+            // Esconde o botão e o score
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('score').style.display = 'none';
+            
+            // Mostra a mensagem final
+            document.getElementById('finalMessage').style.display = 'block';
+            
+            // Cria confete
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        }
+
+        function restartGame() {
+            // Reseta as variáveis
+            currentQuestion = 1;
+            score = 0;
+            answeredQuestions = 0;
+            
+            // Mostra o score
+            document.getElementById('score').style.display = 'block';
+            document.getElementById('score').textContent = 'Pontuação: 0/0';
+            
+            // Esconde a mensagem final
+            document.getElementById('finalMessage').style.display = 'none';
+            
+            // Mostra a primeira pergunta
+            document.getElementById('question1').classList.add('active');
+            document.getElementById('question1').style.display = 'block';
+            
+            // Esconde as outras perguntas
+            for (let i = 2; i <= totalQuestions; i++) {
+                document.getElementById(`question${i}`).classList.remove('active');
+                document.getElementById(`question${i}`).style.display = 'none';
+            }
+            
+            // Remove as classes de resposta
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+                option.style.pointerEvents = 'auto';
+            });
+            
+            // Esconde o botão
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
