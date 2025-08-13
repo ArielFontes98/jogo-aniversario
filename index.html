@@ -26,7 +26,7 @@
             border-radius: 25px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             padding: 35px;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             text-align: center;
         }
@@ -54,34 +54,65 @@
         }
 
         .julia-main-photo {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             margin: 25px auto;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4em;
-            color: white;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             box-shadow: 0 15px 35px rgba(196, 69, 105, 0.4);
             animation: pulse 2s infinite;
             border: 5px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .julia-main-photo::before {
+            content: '👑';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .julia-main-photo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.3), rgba(196, 69, 105, 0.3));
+            z-index: 1;
         }
 
         .julia-photo-small {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            color: white;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             margin: 15px auto;
             box-shadow: 0 8px 20px rgba(196, 69, 105, 0.3);
             border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .julia-photo-small::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.2));
         }
 
         @keyframes pulse {
@@ -241,24 +272,33 @@
 
         .photo-gallery {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin: 30px 0;
         }
 
         .gallery-photo {
             width: 100%;
-            height: 80px;
+            height: 100px;
             border-radius: 15px;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            color: white;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             box-shadow: 0 5px 15px rgba(196, 69, 105, 0.3);
             border: 3px solid white;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-photo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
         }
 
         .gallery-photo:hover {
@@ -322,18 +362,27 @@
         }
 
         .question-photo {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ff6b9d, #c44569);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8em;
-            color: white;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             margin: 15px auto;
             box-shadow: 0 5px 15px rgba(196, 69, 105, 0.3);
-            border: 2px solid white;
+            border: 3px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-photo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.2));
         }
 
         @media (max-width: 600px) {
@@ -351,9 +400,8 @@
             }
             
             .julia-main-photo {
-                width: 120px;
-                height: 120px;
-                font-size: 3em;
+                width: 150px;
+                height: 150px;
             }
             
             .photo-gallery {
@@ -368,14 +416,14 @@
             <div class="julia-hearts">💖</div>
             <h1>🎂 Julia 🎂</h1>
             <p>Feliz 18 anos! Vamos testar o quanto você sabe sobre a aniversariante!</p>
-            <div class="julia-main-photo">👑</div>
+            <div class="julia-main-photo" id="mainPhoto"></div>
         </div>
 
         <div class="score" id="score">Pontuação: 0/0</div>
 
         <div class="question-container active" id="question1">
             <div class="question">
-                <div class="question-photo">📚</div>
+                <div class="question-photo" id="photo1"></div>
                 <h3>Qual é a matéria preferida da Julia?</h3>
             </div>
             <div class="options">
@@ -388,7 +436,7 @@
 
         <div class="question-container" id="question2">
             <div class="question">
-                <div class="question-photo">💕</div>
+                <div class="question-photo" id="photo2"></div>
                 <h3>Qual é o apelido do menino que a Julia gosta?</h3>
             </div>
             <div class="options">
@@ -401,7 +449,7 @@
 
         <div class="question-container" id="question3">
             <div class="question">
-                <div class="question-photo">🍫</div>
+                <div class="question-photo" id="photo3"></div>
                 <h3>Qual é o doce preferido da Julia?</h3>
             </div>
             <div class="options">
@@ -414,7 +462,7 @@
 
         <div class="question-container" id="question4">
             <div class="question">
-                <div class="question-photo">🌍</div>
+                <div class="question-photo" id="photo4"></div>
                 <h3>Qual país a Julia tem vontade de conhecer?</h3>
             </div>
             <div class="options">
@@ -427,7 +475,7 @@
 
         <div class="question-container" id="question5">
             <div class="question">
-                <div class="question-photo">👨‍👩‍👧‍👦</div>
+                <div class="question-photo" id="photo5"></div>
                 <h3>Quem são os pais da Julia?</h3>
             </div>
             <div class="options">
@@ -440,7 +488,7 @@
 
         <div class="question-container" id="question6">
             <div class="question">
-                <div class="question-photo">👫</div>
+                <div class="question-photo" id="photo6"></div>
                 <h3>Quem são os irmãos da Julia?</h3>
             </div>
             <div class="options">
@@ -453,7 +501,7 @@
 
         <div class="question-container" id="question7">
             <div class="question">
-                <div class="question-photo">👭</div>
+                <div class="question-photo" id="photo7"></div>
                 <h3>Quem são as primas da Julia?</h3>
             </div>
             <div class="options">
@@ -466,7 +514,7 @@
 
         <div class="question-container" id="question8">
             <div class="question">
-                <div class="question-photo">🌸</div>
+                <div class="question-photo" id="photo8"></div>
                 <h3>Quantas flores a Julia ganhou no aniversário?</h3>
             </div>
             <div class="options">
@@ -479,7 +527,7 @@
 
         <div class="question-container" id="question9">
             <div class="question">
-                <div class="question-photo">🏙️</div>
+                <div class="question-photo" id="photo9"></div>
                 <h3>Em que cidade a Julia mora?</h3>
             </div>
             <div class="options">
@@ -492,7 +540,7 @@
 
         <div class="question-container" id="question10">
             <div class="question">
-                <div class="question-photo">🎂</div>
+                <div class="question-photo" id="photo10"></div>
                 <h3>Quantos anos a Julia está fazendo hoje?</h3>
             </div>
             <div class="options">
@@ -514,13 +562,8 @@
             <p>Que seus 18 anos sejam apenas o começo de uma vida extraordinária! ✨</p>
             
             <div class="julia-special">📸 Galeria Especial da Julia 📸</div>
-            <div class="photo-gallery">
-                <div class="gallery-photo">👑</div>
-                <div class="gallery-photo">💖</div>
-                <div class="gallery-photo">✨</div>
-                <div class="gallery-photo">🎂</div>
-                <div class="gallery-photo">🌸</div>
-                <div class="gallery-photo">💕</div>
+            <div class="photo-gallery" id="photoGallery">
+                <!-- Fotos serão inseridas aqui automaticamente -->
             </div>
             
             <div class="julia-special">💖 Com muito carinho, Família e Amigos 💖</div>
@@ -533,8 +576,53 @@
         let score = 0;
         let totalQuestions = 10;
         let answeredQuestions = 0;
+        let photoIndex = 0;
 
         const correctAnswers = [1, 0, 1, 2, 1, 2, 1, 1, 2, 2];
+
+        // Array com as fotos da Julia (será preenchido automaticamente)
+        const juliaPhotos = [];
+
+        // Função para carregar as fotos automaticamente
+        function loadPhotos() {
+            // Tenta carregar as fotos da pasta images
+            for (let i = 1; i <= 7; i++) {
+                const photoUrl = `images/julia${i}.jpg`;
+                juliaPhotos.push(photoUrl);
+            }
+
+            // Aplica as fotos
+            applyPhotos();
+        }
+
+        // Função para aplicar as fotos
+        function applyPhotos() {
+            // Foto principal
+            if (juliaPhotos.length > 0) {
+                document.getElementById('mainPhoto').style.backgroundImage = `url(${juliaPhotos[0]})`;
+            }
+
+            // Fotos nas perguntas (rotacionando)
+            for (let i = 1; i <= 10; i++) {
+                const photoElement = document.getElementById(`photo${i}`);
+                if (photoElement && juliaPhotos.length > 0) {
+                    const photoIndex = (i - 1) % juliaPhotos.length;
+                    photoElement.style.backgroundImage = `url(${juliaPhotos[photoIndex]})`;
+                }
+            }
+
+            // Galeria final
+            const gallery = document.getElementById('photoGallery');
+            if (gallery) {
+                gallery.innerHTML = '';
+                juliaPhotos.forEach(photo => {
+                    const photoDiv = document.createElement('div');
+                    photoDiv.className = 'gallery-photo';
+                    photoDiv.style.backgroundImage = `url(${photo})`;
+                    gallery.appendChild(photoDiv);
+                });
+            }
+        }
 
         function checkAnswer(selectedOption, questionNumber) {
             const questionContainer = document.getElementById(`question${questionNumber}`);
@@ -654,6 +742,11 @@
             // Esconde o botão
             document.getElementById('nextBtn').style.display = 'none';
         }
+
+        // Carrega as fotos quando a página carrega
+        window.onload = function() {
+            loadPhotos();
+        };
     </script>
 </body>
 </html>
