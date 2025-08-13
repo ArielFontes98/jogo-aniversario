@@ -26,7 +26,7 @@
             border-radius: 25px;
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             padding: 35px;
-            max-width: 550px;
+            max-width: 600px;
             width: 100%;
             text-align: center;
         }
@@ -53,19 +53,35 @@
             font-weight: 500;
         }
 
-        .julia-photo {
-            width: 120px;
-            height: 120px;
+        .julia-main-photo {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            margin: 20px auto;
+            margin: 25px auto;
             background: linear-gradient(45deg, #ff6b9d, #c44569);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
+            font-size: 4em;
             color: white;
-            box-shadow: 0 10px 25px rgba(196, 69, 105, 0.3);
+            box-shadow: 0 15px 35px rgba(196, 69, 105, 0.4);
             animation: pulse 2s infinite;
+            border: 5px solid white;
+        }
+
+        .julia-photo-small {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            color: white;
+            margin: 15px auto;
+            box-shadow: 0 8px 20px rgba(196, 69, 105, 0.3);
+            border: 3px solid white;
         }
 
         @keyframes pulse {
@@ -91,6 +107,21 @@
             margin-bottom: 25px;
             border-left: 6px solid #ff6b9d;
             box-shadow: 0 8px 20px rgba(255, 107, 157, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            opacity: 0.1;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
         }
 
         .question h3 {
@@ -98,6 +129,8 @@
             font-size: 1.4em;
             margin-bottom: 20px;
             font-weight: 600;
+            position: relative;
+            z-index: 1;
         }
 
         .options {
@@ -115,6 +148,8 @@
             font-size: 1.1em;
             font-weight: 500;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
         }
 
         .option:hover {
@@ -204,6 +239,33 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .gallery-photo {
+            width: 100%;
+            height: 80px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            box-shadow: 0 5px 15px rgba(196, 69, 105, 0.3);
+            border: 3px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(196, 69, 105, 0.4);
+        }
+
         .restart-btn {
             background: white;
             color: #ff6b9d;
@@ -259,6 +321,21 @@
             70% { transform: scale(1); }
         }
 
+        .question-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            color: white;
+            margin: 15px auto;
+            box-shadow: 0 5px 15px rgba(196, 69, 105, 0.3);
+            border: 2px solid white;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
@@ -273,10 +350,14 @@
                 padding: 25px;
             }
             
-            .julia-photo {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5em;
+            .julia-main-photo {
+                width: 120px;
+                height: 120px;
+                font-size: 3em;
+            }
+            
+            .photo-gallery {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -287,13 +368,14 @@
             <div class="julia-hearts">💖</div>
             <h1>🎂 Julia 🎂</h1>
             <p>Feliz 18 anos! Vamos testar o quanto você sabe sobre a aniversariante!</p>
-            <div class="julia-photo">👑</div>
+            <div class="julia-main-photo">👑</div>
         </div>
 
         <div class="score" id="score">Pontuação: 0/0</div>
 
         <div class="question-container active" id="question1">
             <div class="question">
+                <div class="question-photo">📚</div>
                 <h3>Qual é a matéria preferida da Julia?</h3>
             </div>
             <div class="options">
@@ -306,6 +388,7 @@
 
         <div class="question-container" id="question2">
             <div class="question">
+                <div class="question-photo">💕</div>
                 <h3>Qual é o apelido do menino que a Julia gosta?</h3>
             </div>
             <div class="options">
@@ -318,6 +401,7 @@
 
         <div class="question-container" id="question3">
             <div class="question">
+                <div class="question-photo">🍫</div>
                 <h3>Qual é o doce preferido da Julia?</h3>
             </div>
             <div class="options">
@@ -330,6 +414,7 @@
 
         <div class="question-container" id="question4">
             <div class="question">
+                <div class="question-photo">🌍</div>
                 <h3>Qual país a Julia tem vontade de conhecer?</h3>
             </div>
             <div class="options">
@@ -342,6 +427,7 @@
 
         <div class="question-container" id="question5">
             <div class="question">
+                <div class="question-photo">👨‍👩‍👧‍👦</div>
                 <h3>Quem são os pais da Julia?</h3>
             </div>
             <div class="options">
@@ -354,6 +440,7 @@
 
         <div class="question-container" id="question6">
             <div class="question">
+                <div class="question-photo">👫</div>
                 <h3>Quem são os irmãos da Julia?</h3>
             </div>
             <div class="options">
@@ -366,6 +453,7 @@
 
         <div class="question-container" id="question7">
             <div class="question">
+                <div class="question-photo">👭</div>
                 <h3>Quem são as primas da Julia?</h3>
             </div>
             <div class="options">
@@ -378,6 +466,7 @@
 
         <div class="question-container" id="question8">
             <div class="question">
+                <div class="question-photo">🌸</div>
                 <h3>Quantas flores a Julia ganhou no aniversário?</h3>
             </div>
             <div class="options">
@@ -390,6 +479,7 @@
 
         <div class="question-container" id="question9">
             <div class="question">
+                <div class="question-photo">🏙️</div>
                 <h3>Em que cidade a Julia mora?</h3>
             </div>
             <div class="options">
@@ -402,6 +492,7 @@
 
         <div class="question-container" id="question10">
             <div class="question">
+                <div class="question-photo">🎂</div>
                 <h3>Quantos anos a Julia está fazendo hoje?</h3>
             </div>
             <div class="options">
@@ -421,6 +512,17 @@
             <p>Que você realize todos os seus sonhos, incluindo conhecer o Canadá! 🌍</p>
             <p>Que o amor da família e dos amigos sempre te acompanhe, e que você continue sendo essa pessoa incrível que é!</p>
             <p>Que seus 18 anos sejam apenas o começo de uma vida extraordinária! ✨</p>
+            
+            <div class="julia-special">📸 Galeria Especial da Julia 📸</div>
+            <div class="photo-gallery">
+                <div class="gallery-photo">👑</div>
+                <div class="gallery-photo">💖</div>
+                <div class="gallery-photo">✨</div>
+                <div class="gallery-photo">🎂</div>
+                <div class="gallery-photo">🌸</div>
+                <div class="gallery-photo">💕</div>
+            </div>
+            
             <div class="julia-special">💖 Com muito carinho, Família e Amigos 💖</div>
             <button class="restart-btn" onclick="restartGame()">Jogar Novamente</button>
         </div>
