@@ -46,3 +46,4 @@ https://SEU_USUARIO.github.io/jogo-aniversario/
 
 ## 🎉 Pronto!
 Agora ela pode acessar o jogo de aniversário de qualquer lugar! 🎂✨
+

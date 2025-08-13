@@ -25,3 +25,4 @@ O jogo está disponível online e pode ser acessado de qualquer dispositivo com 
 ## 💖 Feito com Amor
 
 Criado especialmente para fazer o aniversário ainda mais especial! 🎉
+

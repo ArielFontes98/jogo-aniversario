@@ -87,8 +87,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(255, 107, 157, 0.3), rgba(196, 69, 105, 0.3));
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
             z-index: 1;
+            pointer-events: none;
         }
 
         .julia-photo-small {
@@ -382,7 +383,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.2));
+            background: linear-gradient(45deg, rgba(255, 107, 157, 0.1), rgba(196, 69, 105, 0.1));
+            pointer-events: none;
         }
 
         @media (max-width: 600px) {
@@ -585,11 +587,16 @@
 
         // Função para carregar as fotos automaticamente
         function loadPhotos() {
+            console.log('Iniciando carregamento das fotos...');
             // Tenta carregar as fotos da pasta images
             for (let i = 1; i <= 7; i++) {
                 const photoUrl = `images/julia${i}.jpg`;
+                console.log(`Adicionando foto: ${photoUrl}`);
                 juliaPhotos.push(photoUrl);
             }
+            
+            console.log(`Total de fotos carregadas: ${juliaPhotos.length}`);
+            console.log('Fotos:', juliaPhotos);
 
             // Aplica as fotos
             applyPhotos();
@@ -597,9 +604,16 @@
 
         // Função para aplicar as fotos
         function applyPhotos() {
+            console.log('Aplicando fotos...');
+            
             // Foto principal
             if (juliaPhotos.length > 0) {
-                document.getElementById('mainPhoto').style.backgroundImage = `url(${juliaPhotos[0]})`;
+                const mainPhotoElement = document.getElementById('mainPhoto');
+                console.log('Elemento mainPhoto encontrado:', mainPhotoElement);
+                if (mainPhotoElement) {
+                    mainPhotoElement.style.backgroundImage = `url(${juliaPhotos[0]})`;
+                    console.log('Foto principal aplicada:', juliaPhotos[0]);
+                }
             }
 
             // Fotos nas perguntas (rotacionando)
@@ -608,19 +622,24 @@
                 if (photoElement && juliaPhotos.length > 0) {
                     const photoIndex = (i - 1) % juliaPhotos.length;
                     photoElement.style.backgroundImage = `url(${juliaPhotos[photoIndex]})`;
+                    console.log(`Foto ${i} aplicada: ${juliaPhotos[photoIndex]}`);
                 }
             }
 
             // Galeria final
             const gallery = document.getElementById('photoGallery');
             if (gallery) {
+                console.log('Galeria encontrada, criando fotos...');
                 gallery.innerHTML = '';
-                juliaPhotos.forEach(photo => {
+                juliaPhotos.forEach((photo, index) => {
                     const photoDiv = document.createElement('div');
                     photoDiv.className = 'gallery-photo';
                     photoDiv.style.backgroundImage = `url(${photo})`;
                     gallery.appendChild(photoDiv);
+                    console.log(`Foto da galeria ${index + 1} criada: ${photo}`);
                 });
+            } else {
+                console.log('Galeria não encontrada');
             }
         }
 
